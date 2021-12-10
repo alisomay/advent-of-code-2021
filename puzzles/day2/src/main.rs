@@ -61,6 +61,8 @@ fn main() {
     let instruction_reader = BufReader::new(navigation).lines();
     let mut cruise_computer = CruiseComputer::default();
     let planned_course = cruise_computer.apply_course(instruction_reader);
+
+    // Answer
     assert_eq!(planned_course, 1340836560);
 }
 
