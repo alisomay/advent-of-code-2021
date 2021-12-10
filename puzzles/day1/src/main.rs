@@ -3,7 +3,6 @@ use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::ops::ControlFlow;
 
-#[derive(Debug)]
 struct SonarRegistry {
     last_depth_measurement: Option<usize>,
     comparison_window: VecDeque<Option<usize>>,
@@ -68,7 +67,6 @@ fn main() {
                     if let ControlFlow::Continue((last_window_sum, current_window_sum)) =
                         window_sums
                     {
-                        // dbg!(last, now);
                         if current_window_sum > last_window_sum {
                             sonar_registry.windowed_measurement_increments += 1;
                         }
