@@ -1,7 +1,7 @@
 use std::fs::File;
 use std::io::{BufRead, BufReader, Lines};
 
-#[derive(Debug)]
+#[derive(Default)]
 struct CruiseComputer {
     horizontal_position: usize,
     depth: usize,
@@ -35,7 +35,7 @@ impl CruiseComputer {
                     }
                     ("forward", amount) => {
                         self.horizontal_position += amount;
-                        self.depth += (amount * self.aim);
+                        self.depth += amount * self.aim;
                     }
                     _ => panic!("Submarine explodes! :)"),
                 }
@@ -43,15 +43,6 @@ impl CruiseComputer {
         });
         // Provide planned course
         self.get_planned_course()
-    }
-}
-impl Default for CruiseComputer {
-    fn default() -> Self {
-        Self {
-            horizontal_position: 0,
-            depth: 0,
-            aim: 0,
-        }
     }
 }
 
