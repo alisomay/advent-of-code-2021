@@ -22,6 +22,7 @@ impl Default for SonarRegistry {
 }
 
 fn main() {
+    // Please run `cargo run` in `puzzles/day1`
     let measurements = File::open("src/input").unwrap();
     let reader = BufReader::new(measurements).lines();
 
