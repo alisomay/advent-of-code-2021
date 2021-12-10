@@ -65,7 +65,7 @@ impl From<Vec<i32>> for DiagnosticInterpreter {
 }
 
 fn main() {
-    // Please run `cargo run` in `puzzles/day2`
+    // Please run `cargo run` in `puzzles/day3`
     let navigation = File::open("src/input").unwrap();
     let mut diagnostic_reader = BufReader::new(navigation).lines();
 
@@ -79,7 +79,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_course_with_submarine_manual() {
+    fn power_consumption() {
         let navigation = File::open("src/test_input").unwrap();
         let mut diagnostic_reader = BufReader::new(navigation).lines();
 
