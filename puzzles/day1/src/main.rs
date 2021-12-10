@@ -1,6 +1,6 @@
 use std::collections::VecDeque;
 use std::fs::File;
-use std::io::{BufRead, BufReader};
+use std::io::{BufRead, BufReader, Lines};
 use std::ops::ControlFlow;
 
 struct SonarRegistry {
@@ -10,24 +10,9 @@ struct SonarRegistry {
     windowed_measurement_increments: usize,
 }
 
-impl Default for SonarRegistry {
-    fn default() -> Self {
-        Self {
-            last_depth_measurement: None,
-            comparison_window: VecDeque::from([None, None, None, None]),
-            single_measurement_increments: 0,
-            windowed_measurement_increments: 0,
-        }
-    }
-}
-
-fn main() {
-    // Please run `cargo run` in `puzzles/day1`
-    let measurements = File::open("src/input").unwrap();
-    let reader = BufReader::new(measurements).lines();
-
-    let sonar_registry: SonarRegistry =
-        reader.fold(SonarRegistry::default(), |mut sonar_registry, item| {
+impl SonarRegistry {
+    fn build(self, measurement_reader: Lines<BufReader<File>>) -> SonarRegistry {
+        measurement_reader.fold(self, |mut sonar_registry, item| {
             if let Ok(value) = item {
                 // Attempt a measurement
                 // Assumes valid input
@@ -78,8 +63,51 @@ fn main() {
                 sonar_registry.last_depth_measurement = Some(measurement);
             }
             sonar_registry
-        });
+        })
+    }
+}
 
+impl Default for SonarRegistry {
+    fn default() -> Self {
+        Self {
+            last_depth_measurement: None,
+            comparison_window: VecDeque::from([None, None, None, None]),
+            single_measurement_increments: 0,
+            windowed_measurement_increments: 0,
+        }
+    }
+}
+
+fn main() {
+    // Please run `cargo run` in `puzzles/day1`
+    let measurements = File::open("src/input").unwrap();
+    let measurement_reader = BufReader::new(measurements).lines();
+    // This could have been tone with implementing `From` also.
+    let sonar_registry = SonarRegistry::default().build(measurement_reader);
+
+    // Answers
     assert_eq!(sonar_registry.single_measurement_increments, 1759);
     assert_eq!(sonar_registry.windowed_measurement_increments, 1805);
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn measure_single() {
+        let measurements = File::open("src/test_input").unwrap();
+        let measurement_reader = BufReader::new(measurements).lines();
+        let sonar_registry = SonarRegistry::default().build(measurement_reader);
+
+        assert_eq!(sonar_registry.single_measurement_increments, 7);
+    }
+    #[test]
+    fn measure_windowed() {
+        let measurements = File::open("src/test_input").unwrap();
+        let measurement_reader = BufReader::new(measurements).lines();
+        let sonar_registry = SonarRegistry::default().build(measurement_reader);
+
+        assert_eq!(sonar_registry.windowed_measurement_increments, 5);
+    }
 }
